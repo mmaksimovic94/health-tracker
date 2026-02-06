@@ -49,7 +49,26 @@
             align-items: center;
             padding: 25px 0;
             border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
+        }
+        .daily-quote {
+            text-align: center;
+            padding: 14px 20px;
             margin-bottom: 25px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-style: italic;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 0.02em;
+            line-height: 1.6;
+        }
+        .daily-quote .quote-author {
+            display: block;
+            margin-top: 4px;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--primary);
         }
         .header-left { flex: 1; }
         .header h1 {
@@ -828,6 +847,8 @@
             </button>
         </div>
     </header>
+
+    <div class="daily-quote" id="daily-quote"></div>
 
     <nav class="tabs">
         <button class="tab active" data-tab="weight">Weight</button>
@@ -2057,9 +2078,70 @@ function checkNewDay() {
     }
 }
 
+const QUOTES = [
+    ["The only person you are destined to become is the person you decide to be.", "Ralph Waldo Emerson"],
+    ["Discipline is choosing between what you want now and what you want most.", "Abraham Lincoln"],
+    ["The pain you feel today will be the strength you feel tomorrow.", "Arnold Schwarzenegger"],
+    ["We are what we repeatedly do. Excellence is not an act, but a habit.", "Aristotle"],
+    ["The body achieves what the mind believes.", "Napoleon Hill"],
+    ["No man has the right to be an amateur in the matter of physical training.", "Socrates"],
+    ["The resistance that you fight physically in the gym and the resistance that you fight in life can only build a strong character.", "Arnold Schwarzenegger"],
+    ["Take care of your body. It's the only place you have to live.", "Jim Rohn"],
+    ["Today I will do what others won't, so tomorrow I can accomplish what others can't.", "Jerry Rice"],
+    ["Success isn't always about greatness. It's about consistency.", "Dwayne Johnson"],
+    ["The last three or four reps is what makes the muscle grow.", "Arnold Schwarzenegger"],
+    ["Your health is an investment, not an expense.", "Unknown"],
+    ["The hard days are what make you stronger.", "Aly Raisman"],
+    ["If something stands between you and your success, move it. Never be denied.", "Dwayne Johnson"],
+    ["Strength does not come from the physical capacity. It comes from an indomitable will.", "Mahatma Gandhi"],
+    ["The clock is ticking. Are you becoming the person you want to be?", "Greg Plitt"],
+    ["You don't have to be extreme, just consistent.", "Unknown"],
+    ["The iron never lies to you. Two hundred pounds is always two hundred pounds.", "Henry Rollins"],
+    ["Once you learn to quit, it becomes a habit.", "Vince Lombardi"],
+    ["What hurts today makes you stronger tomorrow.", "Jay Cutler"],
+    ["The only bad workout is the one that didn't happen.", "Unknown"],
+    ["Motivation is what gets you started. Habit is what keeps you going.", "Jim Ryun"],
+    ["The difference between who you are and who you want to be is what you do.", "Unknown"],
+    ["Don't count the days. Make the days count.", "Muhammad Ali"],
+    ["The successful warrior is the average man, with laser-like focus.", "Bruce Lee"],
+    ["You miss 100% of the shots you don't take.", "Wayne Gretzky"],
+    ["Hard work beats talent when talent doesn't work hard.", "Tim Notke"],
+    ["The mind is the limit. As long as the mind can envision it, you can achieve it.", "Arnold Schwarzenegger"],
+    ["It's not about having time. It's about making time.", "Unknown"],
+    ["The best time to plant a tree was 20 years ago. The second best time is now.", "Chinese Proverb"],
+    ["Champions aren't made in gyms. Champions are made from something deep inside them.", "Muhammad Ali"],
+    ["The day you stop making excuses is the day you start making progress.", "Greg Plitt"],
+    ["You gotta want it so bad that it becomes a part of you.", "Greg Plitt"],
+    ["To be the best, you must be willing to do what others won't.", "Greg Plitt"],
+    ["The mind always fails first, not the body. The secret is to make your mind work for you, not against you.", "Greg Plitt"],
+    ["Wake up and make a conscious decision every day to be better than you were yesterday.", "Greg Plitt"],
+    ["If tomorrow wasn't promised, what would you give for today?", "Greg Plitt"],
+    ["The real workout starts when you want to stop.", "Greg Plitt"],
+    ["You are either getting better or you are getting worse. You never stay the same.", "Greg Plitt"],
+    ["When you want to succeed as bad as you want to breathe, then you'll be successful.", "Eric Thomas"],
+    ["Don't cry to quit. Cry to keep going.", "Eric Thomas"],
+    ["The difference between those who succeed and those who fail isn't what they have — it's what they do with what they have.", "Eric Thomas"],
+    ["Everybody wants to be a beast until it's time to do what beasts do.", "Eric Thomas"],
+    ["You can't cheat the grind. It knows how much you've invested. It won't give you anything you haven't worked for.", "Eric Thomas"],
+    ["When you find your why, you find a way to make it happen.", "Eric Thomas"],
+    ["Pain is temporary. It may last for a minute, an hour, a day, or even a year, but eventually it will subside.", "Eric Thomas"],
+    ["Fall in love with the process, and the results will come.", "Eric Thomas"],
+    ["Information changes situations.", "Eric Thomas"],
+    ["Winners focus on winning. Losers focus on winners.", "Eric Thomas"],
+];
+
+function getDailyQuote() {
+    const today = new Date();
+    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+    const quote = QUOTES[dayOfYear % QUOTES.length];
+    document.getElementById('daily-quote').innerHTML =
+        `"${quote[0]}"<span class="quote-author">— ${quote[1]}</span>`;
+}
+
 function init() {
     checkNewDay();
     document.getElementById('current-date').textContent = formatDate(getToday());
+    getDailyQuote();
 
     const data = getData();
     document.querySelectorAll('.supp-item').forEach(item => {
