@@ -14,9 +14,9 @@ Open `supplements.html` directly in a browser. No server, build step, or install
 
 The entire application lives in **one file** (`supplements.html`) with embedded CSS and JavaScript:
 
-- **Lines 7–999**: CSS with custom properties for dark theme (`:root` variables)
-- **Lines 1000–1403**: HTML markup with three tab panels
-- **Lines 1404–2644**: JavaScript — all application logic
+- **Lines 8–1149**: CSS with custom properties for dark theme (`:root` variables)
+- **Lines 1150–1591**: HTML markup with three tab panels
+- **Lines 1592–2941**: JavaScript — all application logic
 
 ### Data Layer
 
@@ -39,6 +39,14 @@ All state is stored in `localStorage` under the key `healthTracker`. The `getDat
 2. **Weight** — Logs weight (kg) and body fat (%). Custom Canvas-based line charts with 7D/14D/30D range selector. Validation: weight 20–300 kg, body fat 1–60%.
 3. **Workouts** — Push/Pull/Legs strength tracking with per-exercise logging (name, sets, reps, kg) and datalist autocomplete. Cardio (Zone 2, HIIT), daily steps. Rest mode is exclusive (clears other selections). Exercises are stored parallel to workouts — toggling off a type does not delete its exercises.
 
+### Clipboard Sync
+
+Copy and Paste buttons in the header enable cross-device data transfer without a backend. "Copy" encodes all `localStorage` data as a `HT:`-prefixed base64 string (`JSON.stringify` → `encodeURIComponent` → `btoa` → `HT:` prefix) and writes it to the clipboard. "Paste" opens a modal where the user pastes the string from their other device. Uses `navigator.clipboard.writeText()` with `execCommand('copy')` fallback for iOS Safari. Toast notifications (`showToast()`) provide feedback, debounced via a timer property.
+
+### Logo
+
+Inline SVG logo in the header — a rounded square with a green-to-blue linear gradient (`#4ade80` → `#60a5fa`) and a white ECG/pulse polyline. The same SVG is used as an inline data URI favicon (`<link rel="icon">`), so no external files are needed.
+
 ### Daily Quote Banner
 
 A rotating motivational quote displayed between the header and tab bar. 49 quotes from Greg Plitt, Eric Thomas, Arnold Schwarzenegger, Muhammad Ali, and others. The quote is selected deterministically using day-of-year modulo the array length (`QUOTES` array, `getDailyQuote()` function) — no stored state.
@@ -49,4 +57,5 @@ A rotating motivational quote displayed between the header and tab bar. 49 quote
 - Charts are drawn directly on `<canvas>` elements — no charting library
 - Cycle status is calculated from `startDate` + elapsed days, not stored state
 - Import/export uses JSON file download/upload via FileReader API
+- Clipboard sync uses `HT:`-prefixed base64 encoding (`encodeData()` / `decodeData()`) for cross-device data transfer via copy/paste
 - Historical entries are editable via click-to-reveal edit panels
