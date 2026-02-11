@@ -696,6 +696,110 @@
             margin-bottom: 6px;
         }
 
+        /* Exercise Panels */
+        .exercise-panel {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+        }
+        .exercise-panel.push { border-color: var(--accent); }
+        .exercise-panel.pull { border-color: var(--purple); }
+        .exercise-panel.legs { border-color: var(--orange); }
+        .exercise-panel-header {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .exercise-panel.push .exercise-panel-header { color: var(--accent); }
+        .exercise-panel.pull .exercise-panel-header { color: var(--purple); }
+        .exercise-panel.legs .exercise-panel-header { color: var(--orange); }
+        .exercise-labels {
+            display: grid;
+            grid-template-columns: 1fr 60px 60px 60px 32px;
+            gap: 6px;
+            margin-bottom: 4px;
+            padding: 0 2px;
+        }
+        .exercise-labels span {
+            font-size: 0.65rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .exercise-row {
+            display: grid;
+            grid-template-columns: 1fr 60px 60px 60px 32px;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+        .exercise-row input[type="text"] {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--card);
+            color: var(--text);
+            font-size: 0.8rem;
+        }
+        .exercise-row input[type="number"] {
+            width: 100%;
+            padding: 6px 4px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--card);
+            color: var(--text);
+            font-size: 0.8rem;
+            text-align: center;
+            -moz-appearance: textfield;
+        }
+        .exercise-row input[type="number"]::-webkit-inner-spin-button,
+        .exercise-row input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .exercise-row input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .exercise-remove {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--muted);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .exercise-remove:hover {
+            background: #4a1521;
+            color: #f43f5e;
+        }
+        .exercise-add-btn {
+            width: 100%;
+            padding: 8px;
+            border: 1px dashed var(--border);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--muted);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 4px;
+        }
+        .exercise-add-btn:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-secondary);
+        }
         /* Workout Week View */
         .workout-week {
             margin-top: 20px;
@@ -890,6 +994,7 @@
             .history-day .day-weight { font-size: 0.75rem; }
             .charts-container { grid-template-columns: 1fr; }
             .progress-streak-container { grid-template-columns: 1fr; }
+            .exercise-labels, .exercise-row { grid-template-columns: 1fr 50px 50px 50px 28px; gap: 4px; }
         }
     </style>
 </head>
@@ -1187,6 +1292,7 @@
                         Rest
                     </button>
                 </div>
+                <div id="exercise-panels-today"></div>
                 <div class="workout-section-label">Cardio & Steps</div>
                 <div class="cardio-row">
                     <div class="workout-selector">
@@ -1250,6 +1356,7 @@
                                 <span class="steps-label">steps</span>
                             </div>
                         </div>
+                        <div id="exercise-panels-edit"></div>
                         <div class="edit-panel-actions" style="margin-top: 12px;">
                             <button class="btn-save" onclick="saveWorkoutEdit()">Save Changes</button>
                             <button class="btn-delete" onclick="deleteWorkoutEntry()">Delete</button>
@@ -1258,6 +1365,38 @@
                 </div>
             </div>
         </div>
+
+        <datalist id="exercises-push">
+            <option value="Bench Press">
+            <option value="Overhead Press">
+            <option value="Incline DB Press">
+            <option value="Dips">
+            <option value="Lateral Raises">
+            <option value="Tricep Pushdowns">
+            <option value="Cable Fly">
+            <option value="Machine Fly">
+        </datalist>
+        <datalist id="exercises-pull">
+            <option value="Pull-ups">
+            <option value="Barbell Rows">
+            <option value="Face Pulls">
+            <option value="Bayesian Cable Curl">
+            <option value="Hammer Curl">
+            <option value="Barbell Curl">
+            <option value="Lat Pulldown">
+            <option value="Cable Rows">
+        </datalist>
+        <datalist id="exercises-legs">
+            <option value="Barbell Squat">
+            <option value="Goblet Squat">
+            <option value="Bulgarian Split Squat">
+            <option value="Romanian Deadlifts">
+            <option value="Leg Press">
+            <option value="Leg Curls">
+            <option value="Leg Extension">
+            <option value="Calf Raises">
+            <option value="Lunges">
+        </datalist>
     </div>
 
 </div>
@@ -1285,7 +1424,8 @@ function getData() {
         },
         weight: {},
         workouts: {},
-        steps: {}
+        steps: {},
+        exercises: {}
     };
     try {
         const saved = localStorage.getItem(STORAGE_KEY);
@@ -1296,7 +1436,8 @@ function getData() {
             cycles: { ...defaults.cycles, ...data.cycles },
             weight: data.weight || {},
             workouts: data.workouts || {},
-            steps: data.steps || {}
+            steps: data.steps || {},
+            exercises: data.exercises || {}
         };
     } catch {
         return defaults;
@@ -1948,6 +2089,7 @@ function toggleWorkout(type) {
 
     saveData(data);
     updateWorkoutDisplay();
+    renderExercisePanels();
 }
 
 function updateWorkoutDisplay() {
@@ -2030,6 +2172,8 @@ function updateWorkoutDisplay() {
             el.classList.toggle('editing', el.dataset.date === editingWorkoutDate);
         });
     }
+
+    renderExercisePanels();
 }
 
 // Workout Edit Panel
@@ -2069,12 +2213,14 @@ function showWorkoutEditPanel(dateStr) {
 
     // Show panel
     document.getElementById('workout-edit-panel').classList.add('active');
+    renderEditExercisePanels();
 }
 
 function hideWorkoutEditPanel() {
     editingWorkoutDate = null;
     editWorkoutTypes = [];
     document.getElementById('workout-edit-panel').classList.remove('active');
+    document.getElementById('exercise-panels-edit').innerHTML = '';
     document.querySelectorAll('.week-day').forEach(el => {
         el.classList.remove('editing');
     });
@@ -2100,6 +2246,7 @@ function toggleEditWorkout(type) {
     document.querySelectorAll('[data-edit-workout]').forEach(btn => {
         btn.classList.toggle('active', editWorkoutTypes.includes(btn.dataset.editWorkout));
     });
+    renderEditExercisePanels();
 }
 
 function saveWorkoutEdit() {
@@ -2136,10 +2283,173 @@ function deleteWorkoutEntry() {
     const data = getData();
     delete data.workouts[editingWorkoutDate];
     delete data.steps[editingWorkoutDate];
+    delete data.exercises[editingWorkoutDate];
     saveData(data);
 
     hideWorkoutEditPanel();
     updateWorkoutDisplay();
+}
+
+// Exercise Tracking
+const STRENGTH_TYPES = ['push', 'pull', 'legs'];
+const STRENGTH_LABELS = { push: 'Push', pull: 'Pull', legs: 'Legs' };
+
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function getExercises(dateStr, type) {
+    const data = getData();
+    return (data.exercises[dateStr] && data.exercises[dateStr][type]) || [];
+}
+
+function saveExercises(dateStr, type, exercises) {
+    const data = getData();
+    if (!data.exercises[dateStr]) data.exercises[dateStr] = {};
+
+    // Filter out completely empty rows
+    const cleaned = exercises.filter(ex => ex.name || ex.sets || ex.reps);
+    if (cleaned.length > 0) {
+        data.exercises[dateStr][type] = cleaned;
+    } else {
+        delete data.exercises[dateStr][type];
+        // Clean up empty date entry
+        if (Object.keys(data.exercises[dateStr]).length === 0) {
+            delete data.exercises[dateStr];
+        }
+    }
+    saveData(data);
+}
+
+function buildExercisePanelHTML(type, exercises, context) {
+    let rowsHtml = '';
+    exercises.forEach((ex, i) => {
+        rowsHtml += `<div class="exercise-row">
+            <input type="text" list="exercises-${type}" value="${escapeHtml(ex.name || '')}" placeholder="Exercise name"
+                onchange="updateExercise('${context}','${type}',${i},'name',this.value)"
+                oninput="updateExercise('${context}','${type}',${i},'name',this.value)">
+            <input type="number" value="${ex.sets || ''}" placeholder="0" min="0" max="99"
+                onchange="updateExercise('${context}','${type}',${i},'sets',this.value)">
+            <input type="number" value="${ex.reps || ''}" placeholder="0" min="0" max="999"
+                onchange="updateExercise('${context}','${type}',${i},'reps',this.value)">
+            <input type="number" value="${ex.kg || ''}" placeholder="0" min="0" max="999" step="0.5"
+                onchange="updateExercise('${context}','${type}',${i},'kg',this.value)">
+            <button class="exercise-remove" onclick="removeExercise('${context}','${type}',${i})">&times;</button>
+        </div>`;
+    });
+
+    return `<div class="exercise-panel ${type}">
+        <div class="exercise-panel-header">${STRENGTH_LABELS[type]} Exercises</div>
+        <div class="exercise-labels"><span>Exercise</span><span>Sets</span><span>Reps</span><span>Kg</span><span></span></div>
+        ${rowsHtml}
+        <button class="exercise-add-btn" onclick="addExercise('${context}','${type}')">+ Add Exercise</button>
+    </div>`;
+}
+
+function renderExercisePanels() {
+    const container = document.getElementById('exercise-panels-today');
+    if (!container) return;
+
+    const data = getData();
+    let todayWorkouts = data.workouts[getToday()] || [];
+    if (typeof todayWorkouts === 'string') todayWorkouts = todayWorkouts ? [todayWorkouts] : [];
+
+    const activeStrength = STRENGTH_TYPES.filter(t => todayWorkouts.includes(t));
+
+    if (activeStrength.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+
+    let html = '';
+    activeStrength.forEach(type => {
+        const exercises = getExercises(getToday(), type);
+        html += buildExercisePanelHTML(type, exercises, 'today');
+    });
+    container.innerHTML = html;
+}
+
+function renderEditExercisePanels() {
+    const container = document.getElementById('exercise-panels-edit');
+    if (!container || !editingWorkoutDate) return;
+
+    const activeStrength = STRENGTH_TYPES.filter(t => editWorkoutTypes.includes(t));
+
+    if (activeStrength.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+
+    let html = '';
+    activeStrength.forEach(type => {
+        const exercises = getExercises(editingWorkoutDate, type);
+        html += buildExercisePanelHTML(type, exercises, 'edit');
+    });
+    container.innerHTML = html;
+}
+
+function getExerciseDate(context) {
+    return context === 'edit' ? editingWorkoutDate : getToday();
+}
+
+function addExercise(context, type) {
+    const dateStr = getExerciseDate(context);
+    const data = getData();
+    if (!data.exercises[dateStr]) data.exercises[dateStr] = {};
+    if (!data.exercises[dateStr][type]) data.exercises[dateStr][type] = [];
+    data.exercises[dateStr][type].push({ name: '', sets: '', reps: '' });
+    saveData(data);
+
+    if (context === 'edit') {
+        renderEditExercisePanels();
+    } else {
+        renderExercisePanels();
+    }
+
+    // Focus the new name input
+    const container = document.getElementById(context === 'edit' ? 'exercise-panels-edit' : 'exercise-panels-today');
+    const panels = container.querySelectorAll(`.exercise-panel.${type}`);
+    if (panels.length > 0) {
+        const rows = panels[0].querySelectorAll('.exercise-row');
+        if (rows.length > 0) {
+            const lastRow = rows[rows.length - 1];
+            const nameInput = lastRow.querySelector('input[type="text"]');
+            if (nameInput) nameInput.focus();
+        }
+    }
+}
+
+function removeExercise(context, type, index) {
+    const dateStr = getExerciseDate(context);
+    const exercises = getExercises(dateStr, type);
+    exercises.splice(index, 1);
+    saveExercises(dateStr, type, exercises);
+
+    if (context === 'edit') {
+        renderEditExercisePanels();
+    } else {
+        renderExercisePanels();
+    }
+}
+
+function updateExercise(context, type, index, field, value) {
+    const dateStr = getExerciseDate(context);
+    const exercises = getExercises(dateStr, type);
+    if (!exercises[index]) return;
+
+    if (field === 'name') {
+        exercises[index].name = value;
+    } else if (field === 'sets') {
+        exercises[index].sets = parseInt(value) || '';
+    } else if (field === 'reps') {
+        exercises[index].reps = parseInt(value) || '';
+    } else if (field === 'kg') {
+        exercises[index].kg = parseFloat(value) || '';
+    }
+
+    saveExercises(dateStr, type, exercises);
 }
 
 // Init
@@ -2288,11 +2598,13 @@ function importData(event) {
             const weightCount = imported.weight ? Object.keys(imported.weight).length : 0;
             const workoutCount = imported.workouts ? Object.keys(imported.workouts).length : 0;
             const stepsCount = imported.steps ? Object.keys(imported.steps).length : 0;
+            const exerciseCount = imported.exercises ? Object.keys(imported.exercises).length : 0;
 
             const msg = `Import backup?\n\nThis will replace your current data with:\n` +
                 `• ${weightCount} weight entries\n` +
                 `• ${workoutCount} workout entries\n` +
                 `• ${stepsCount} steps entries\n` +
+                `• ${exerciseCount} exercise entries\n` +
                 `• Supplement streak: ${imported.supplements?.streak || 0} days\n\n` +
                 `This cannot be undone.`;
 
@@ -2305,6 +2617,7 @@ function importData(event) {
             if (imported.weight) data.weight = imported.weight;
             if (imported.workouts) data.workouts = imported.workouts;
             if (imported.steps) data.steps = imported.steps;
+            if (imported.exercises) data.exercises = imported.exercises;
 
             saveData(data);
 
