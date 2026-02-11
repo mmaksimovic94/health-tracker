@@ -14,9 +14,9 @@ Open `supplements.html` directly in a browser. No server, build step, or install
 
 The entire application lives in **one file** (`supplements.html`) with embedded CSS and JavaScript:
 
-- **Lines 7–820**: CSS with custom properties for dark theme (`:root` variables)
-- **Lines 824–1178**: HTML markup with three tab panels
-- **Lines 1180–2213**: JavaScript — all application logic
+- **Lines 7–999**: CSS with custom properties for dark theme (`:root` variables)
+- **Lines 1000–1403**: HTML markup with three tab panels
+- **Lines 1404–2644**: JavaScript — all application logic
 
 ### Data Layer
 
@@ -28,7 +28,8 @@ All state is stored in `localStorage` under the key `healthTracker`. The `getDat
   cycles: { boron: { startDate }, ashwa: { startDate } },
   weight: { [dateStr]: { weight, bf } },
   workouts: { [dateStr]: [types] },
-  steps: { [dateStr]: stepCount }
+  steps: { [dateStr]: stepCount },
+  exercises: { [dateStr]: { push|pull|legs: [{ name, sets, reps, kg }] } }
 }
 ```
 
@@ -36,7 +37,7 @@ All state is stored in `localStorage` under the key `healthTracker`. The `getDat
 
 1. **Supplements** — 13+ items across Morning/Afternoon/Evening time slots. Tracks daily completion streak. Manages on/off cycling for Boron (14 on / 7 off) and Ashwagandha (30 on / 7 off).
 2. **Weight** — Logs weight (kg) and body fat (%). Custom Canvas-based line charts with 7D/14D/30D range selector. Validation: weight 20–300 kg, body fat 1–60%.
-3. **Workouts** — Push/Pull/Legs strength tracking, cardio (Zone 2, HIIT), daily steps. Rest mode is exclusive (clears other selections).
+3. **Workouts** — Push/Pull/Legs strength tracking with per-exercise logging (name, sets, reps, kg) and datalist autocomplete. Cardio (Zone 2, HIIT), daily steps. Rest mode is exclusive (clears other selections). Exercises are stored parallel to workouts — toggling off a type does not delete its exercises.
 
 ### Daily Quote Banner
 
