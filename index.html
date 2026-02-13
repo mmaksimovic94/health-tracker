@@ -911,6 +911,9 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
+        .charts-container.stacked {
+            grid-template-columns: 1fr;
+        }
         .chart-section {
             background: var(--bg-secondary);
             border-radius: 10px;
@@ -1427,6 +1430,8 @@
                             <button class="active" data-range="7">7D</button>
                             <button data-range="14">14D</button>
                             <button data-range="30">30D</button>
+                            <button data-range="60">60D</button>
+                            <button data-range="90">90D</button>
                         </div>
                     </div>
                     <div class="charts-container">
@@ -1943,11 +1948,13 @@ document.querySelectorAll('.chart-range button').forEach(btn => {
         document.querySelectorAll('.chart-range button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         chartRange = parseInt(btn.dataset.range);
+        document.querySelector('.charts-container').classList.toggle('stacked', chartRange >= 60);
         drawCharts();
     });
 });
 
 function drawCharts() {
+    document.querySelectorAll('.chart-wrap canvas').forEach(c => { c.style.width = ''; c.style.height = ''; });
     drawWeightChart();
     drawBfChart();
 }
@@ -2024,7 +2031,7 @@ function drawWeightChart() {
     ctx.fillStyle = '#64748b';
     ctx.font = '9px -apple-system, BlinkMacSystemFont, sans-serif';
     ctx.textAlign = 'center';
-    const labelStep = chartRange <= 7 ? 1 : chartRange <= 14 ? 2 : 5;
+    const labelStep = chartRange <= 7 ? 1 : chartRange <= 14 ? 2 : chartRange <= 30 ? 5 : chartRange <= 60 ? 10 : 15;
     points.forEach((p, i) => {
         if (i % labelStep === 0 || i === points.length - 1) {
             const x = padding.left + (chartWidth / (points.length - 1)) * i;
@@ -2074,7 +2081,7 @@ function drawWeightChart() {
             const x = padding.left + (chartWidth / (points.length - 1)) * i;
             const y = getY(p.weight);
             ctx.beginPath();
-            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.arc(x, y, chartRange >= 60 ? 2.5 : 4, 0, Math.PI * 2);
             ctx.fill();
         }
     });
@@ -2152,7 +2159,7 @@ function drawBfChart() {
     ctx.fillStyle = '#64748b';
     ctx.font = '9px -apple-system, BlinkMacSystemFont, sans-serif';
     ctx.textAlign = 'center';
-    const labelStep = chartRange <= 7 ? 1 : chartRange <= 14 ? 2 : 5;
+    const labelStep = chartRange <= 7 ? 1 : chartRange <= 14 ? 2 : chartRange <= 30 ? 5 : chartRange <= 60 ? 10 : 15;
     points.forEach((p, i) => {
         if (i % labelStep === 0 || i === points.length - 1) {
             const x = padding.left + (chartWidth / (points.length - 1)) * i;
@@ -2202,7 +2209,7 @@ function drawBfChart() {
             const x = padding.left + (chartWidth / (points.length - 1)) * i;
             const y = getY(p.bf);
             ctx.beginPath();
-            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.arc(x, y, chartRange >= 60 ? 2.5 : 4, 0, Math.PI * 2);
             ctx.fill();
         }
     });
