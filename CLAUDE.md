@@ -8,15 +8,15 @@ Daily Health Tracker — a single-file, client-side web application for tracking
 
 ## Running
 
-Open `supplements.html` directly in a browser. No server, build step, or install required.
+Open `index.html` directly in a browser. No server, build step, or install required.
 
 ## Architecture
 
-The entire application lives in **one file** (`supplements.html`) with embedded CSS and JavaScript:
+The entire application lives in **one file** (`index.html`) with embedded CSS and JavaScript:
 
-- **Lines 8–1149**: CSS with custom properties for dark theme (`:root` variables)
-- **Lines 1150–1591**: HTML markup with three tab panels
-- **Lines 1592–2941**: JavaScript — all application logic
+- **Lines 8–1365**: CSS with custom properties for dark theme (`:root` variables)
+- **Lines 1367–1727**: HTML markup with three tab panels
+- **Lines 1728–3412**: JavaScript — all application logic
 
 ### Data Layer
 
@@ -37,7 +37,7 @@ All state is stored in `localStorage` under the key `healthTracker`. The `getDat
 
 1. **Supplements** — 13+ items across Morning/Afternoon/Evening time slots. Tracks daily completion streak. Manages on/off cycling for Boron (14 on / 7 off) and Ashwagandha (30 on / 7 off).
 2. **Weight** — Logs weight (kg) and body fat (%). Custom Canvas-based line charts with 7D/14D/30D range selector. Validation: weight 20–300 kg, body fat 1–60%.
-3. **Workouts** — Push/Pull/Legs strength tracking with per-exercise logging (name, sets, reps, kg) and datalist autocomplete. Cardio (Zone 2, HIIT), daily steps. Rest mode is exclusive (clears other selections). Exercises are stored parallel to workouts — toggling off a type does not delete its exercises.
+3. **Workouts** — Push/Pull/Legs strength tracking with per-exercise logging (name, sets, reps, kg) and datalist autocomplete. Cardio (Zone 2, HIIT), daily steps. Rest mode is exclusive (clears other selections). Exercises are stored parallel to workouts — toggling off a type does not delete its exercises. Exercise entries use a card-based UI with color-coded left borders per type and inline progressive overload history showing the last 3 sessions (`lookupExerciseHistory()`, `renderExerciseHistory()`).
 
 ### Clipboard Sync
 
