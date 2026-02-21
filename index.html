@@ -711,73 +711,98 @@
         /* Exercise Panels */
         .exercise-panel {
             margin-top: 12px;
-            padding: 12px;
-            border-radius: 10px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
+            padding: 0;
+            background: transparent;
+            border: none;
         }
-        .exercise-panel.push { border-color: var(--accent); }
-        .exercise-panel.pull { border-color: var(--purple); }
-        .exercise-panel.legs { border-color: var(--orange); }
         .exercise-panel-header {
             font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
+            padding-left: 4px;
         }
         .exercise-panel.push .exercise-panel-header { color: var(--accent); }
         .exercise-panel.pull .exercise-panel-header { color: var(--purple); }
         .exercise-panel.legs .exercise-panel-header { color: var(--orange); }
-        .exercise-labels {
-            display: grid;
-            grid-template-columns: 1fr 60px 60px 60px 32px;
-            gap: 6px;
-            margin-bottom: 4px;
-            padding: 0 2px;
+
+        /* Card-style exercise entries */
+        .exercise-entry {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-left: 3px solid var(--border);
         }
-        .exercise-labels span {
-            font-size: 0.65rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .exercise-row {
-            display: grid;
-            grid-template-columns: 1fr 60px 60px 60px 32px;
-            gap: 6px;
-            margin-bottom: 6px;
+        .exercise-panel.push .exercise-entry { border-left-color: var(--accent); }
+        .exercise-panel.pull .exercise-entry { border-left-color: var(--purple); }
+        .exercise-panel.legs .exercise-entry { border-left-color: var(--orange); }
+
+        .exercise-entry-top {
+            display: flex;
             align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
         }
-        .exercise-row input[type="text"] {
-            width: 100%;
-            padding: 6px 8px;
+        .exercise-entry-top input[type="text"] {
+            flex: 1;
+            padding: 7px 10px;
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 8px;
             background: var(--card);
             color: var(--text);
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
-        .exercise-row input[type="number"] {
-            width: 100%;
-            padding: 6px 4px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background: var(--card);
-            color: var(--text);
-            font-size: 0.8rem;
-            text-align: center;
-            -moz-appearance: textfield;
-        }
-        .exercise-row input[type="number"]::-webkit-inner-spin-button,
-        .exercise-row input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        .exercise-row input:focus {
+        .exercise-entry-top input[type="text"]:focus {
             outline: none;
             border-color: var(--accent);
         }
+
+        .exercise-history {
+            font-size: 0.7rem;
+            color: var(--muted);
+            padding: 0 2px 6px;
+            line-height: 1.4;
+            display: none;
+        }
+        .exercise-history.visible {
+            display: block;
+        }
+        .exercise-history .hist-date {
+            color: var(--text-secondary);
+        }
+        .exercise-history .hist-label {
+            color: var(--muted);
+            margin-right: 2px;
+        }
+
+        .exercise-entry-nums {
+            display: flex;
+            gap: 8px;
+        }
+        .exercise-entry-nums input[type="number"] {
+            flex: 1;
+            padding: 7px 4px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            font-size: 0.85rem;
+            text-align: center;
+            -moz-appearance: textfield;
+        }
+        .exercise-entry-nums input[type="number"]::-webkit-inner-spin-button,
+        .exercise-entry-nums input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .exercise-entry-nums input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
         .exercise-remove {
             width: 28px;
             height: 28px;
@@ -791,6 +816,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
+            flex-shrink: 0;
         }
         .exercise-remove:hover {
             background: #4a1521;
@@ -798,9 +824,9 @@
         }
         .exercise-add-btn {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border: 1px dashed var(--border);
-            border-radius: 6px;
+            border-radius: 10px;
             background: transparent;
             color: var(--muted);
             font-size: 0.8rem;
@@ -811,6 +837,7 @@
         .exercise-add-btn:hover {
             border-color: var(--text-secondary);
             color: var(--text-secondary);
+            background: var(--bg-secondary);
         }
         /* Workout Week View */
         .workout-week {
@@ -1116,6 +1143,189 @@
             box-shadow: 0 4px 15px rgba(96, 165, 250, 0.3);
         }
 
+        /* Supplement Management Modal */
+        .supp-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px;
+            overflow-y: auto;
+            animation: quoteOverlayIn 0.4s ease;
+        }
+        .supp-modal-overlay.visible { display: flex; }
+        .supp-modal {
+            max-width: 540px;
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 28px;
+            margin: auto;
+            animation: quoteModalIn 0.6s ease;
+        }
+        .supp-modal h2 {
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+        .supp-modal-group {
+            margin-bottom: 20px;
+        }
+        .supp-modal-group h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+            letter-spacing: 0.05em;
+        }
+        .supp-modal-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            gap: 8px;
+        }
+        .supp-modal-row:last-child { border-bottom: none; }
+        .supp-modal-row-info { flex: 1; min-width: 0; }
+        .supp-modal-row-name { font-weight: 500; font-size: 0.9rem; }
+        .supp-modal-row-dose { font-size: 0.75rem; color: var(--muted); }
+        .supp-modal-row-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        .btn-edit-supp, .btn-del-supp {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            transition: all 0.2s;
+        }
+        .btn-edit-supp:hover { background: var(--card-border); color: var(--text); }
+        .btn-del-supp:hover { background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: #ef4444; }
+        .supp-modal-edit-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .supp-modal-edit-row input,
+        .supp-modal-edit-row select {
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.8rem;
+        }
+        .supp-modal-edit-row input:focus,
+        .supp-modal-edit-row select:focus { outline: none; border-color: var(--accent); }
+        .supp-modal-edit-actions {
+            grid-column: span 2;
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+        .supp-modal-add {
+            border-top: 1px solid var(--card-border);
+            padding-top: 16px;
+            margin-top: 8px;
+        }
+        .supp-modal-add h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+            letter-spacing: 0.05em;
+        }
+        .supp-add-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .supp-add-grid input,
+        .supp-add-grid select {
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.8rem;
+        }
+        .supp-add-grid input:focus,
+        .supp-add-grid select:focus { outline: none; border-color: var(--accent); }
+        .supp-add-grid label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        .supp-add-grid label input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+        }
+        .supp-modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--card-border);
+        }
+        .btn-reset-defs {
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--muted);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-reset-defs:hover { background: var(--card-border); color: var(--text); }
+        .btn-close-modal {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-close-modal:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(96, 165, 250, 0.3); }
+        .btn-edit-list {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1px dashed var(--accent);
+            border-radius: 12px;
+            background: transparent;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-edit-list:hover { background: rgba(96, 165, 250, 0.08); }
+
         /* Copy/Paste header buttons */
         .btn-copy {
             background: var(--card);
@@ -1146,7 +1356,10 @@
             .history-day .day-weight { font-size: 0.75rem; }
             .charts-container { grid-template-columns: 1fr; }
             .progress-streak-container { grid-template-columns: 1fr; }
-            .exercise-labels, .exercise-row { grid-template-columns: 1fr 50px 50px 50px 28px; gap: 4px; }
+            .exercise-entry { padding: 8px 10px; }
+            .exercise-entry-top input[type="text"] { font-size: 0.8rem; padding: 6px 8px; }
+            .exercise-entry-nums input[type="number"] { font-size: 0.8rem; padding: 6px 4px; }
+            .exercise-entry-nums { gap: 6px; }
             .header-actions { flex-wrap: wrap; }
         }
     </style>
@@ -1170,6 +1383,31 @@
         <div class="paste-modal-actions">
             <button class="btn-paste-cancel" onclick="closePasteModal()">Cancel</button>
             <button class="btn-paste-load" onclick="loadPastedData()">Load Data</button>
+        </div>
+    </div>
+</div>
+
+<div class="supp-modal-overlay" id="supp-modal" onclick="if(event.target===event.currentTarget)closeSuppModal()">
+    <div class="supp-modal">
+        <h2>Edit Supplement List</h2>
+        <div id="supp-modal-list"></div>
+        <div class="supp-modal-add">
+            <h3>Add Supplement</h3>
+            <div class="supp-add-grid">
+                <input type="text" id="add-supp-name" placeholder="Name">
+                <input type="text" id="add-supp-dose" placeholder="Dose">
+                <select id="add-supp-slot">
+                    <option value="morning">Morning</option>
+                    <option value="afternoon">Afternoon</option>
+                    <option value="evening">Evening</option>
+                </select>
+                <label><input type="checkbox" id="add-supp-optional"> Optional</label>
+            </div>
+            <button class="btn-close-modal" style="width:100%" onclick="addSupplement()">Add</button>
+        </div>
+        <div class="supp-modal-footer">
+            <button class="btn-reset-defs" onclick="resetSupplementDefs()">Reset to Defaults</button>
+            <button class="btn-close-modal" onclick="closeSuppModal()">Done</button>
         </div>
     </div>
 </div>
@@ -1258,123 +1496,16 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header"><h2>Cycle Status</h2></div>
-            <div class="card-body">
-                <div class="cycle-row">
-                    <span class="cycle-name">Boron</span>
-                    <div class="cycle-meta">
-                        <span class="cycle-days" id="boron-days">Day 1 of 14</span>
-                        <span class="badge on" id="boron-badge"><span class="badge-dot"></span>ON</span>
-                        <button class="btn-small" onclick="resetCycle('boron')">Reset</button>
-                    </div>
-                </div>
-                <div class="cycle-row">
-                    <span class="cycle-name">Ashwagandha</span>
-                    <div class="cycle-meta">
-                        <span class="cycle-days" id="ashwa-days">Day 1 of 30</span>
-                        <span class="badge on" id="ashwa-badge"><span class="badge-dot"></span>ON</span>
-                        <button class="btn-small" onclick="resetCycle('ashwa')">Reset</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="cycle-status-card"></div>
 
-        <div class="card">
-            <div class="card-header"><h2>Morning (Brain & Heart)</h2></div>
-            <div class="supp-item" data-id="mag-taurate">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">Magnesium Taurate</div>
-                    <div class="supp-dose">125-150mg (Elemental)</div>
-                </div>
-            </div>
-            <div class="supp-item" data-id="d3-k2">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">Vitamin D3 + K2<span class="tag">With Fat</span></div>
-                    <div class="supp-dose">2000 IU / 50mcg</div>
-                </div>
-            </div>
-            <div class="supp-item" data-id="omega3">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">Omega-3<span class="tag">With Fat</span></div>
-                    <div class="supp-dose">1000-2000mg (High EPA)</div>
-                </div>
-            </div>
-            <div class="supp-item" data-id="boron">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">Boron<span class="badge on" id="boron-inline"><span class="badge-dot"></span>ON</span></div>
-                    <div class="supp-dose">3-6mg</div>
-                </div>
-            </div>
-            <div class="supp-item" data-id="b-complex">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">B-Complex</div>
-                    <div class="supp-dose">1 Capsule (Methylated)</div>
-                </div>
-            </div>
-            <div class="supp-item" data-id="hair-am">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">Hair Loss Treatment</div>
-                    <div class="supp-dose">1 Pill</div>
-                </div>
-            </div>
-            <div class="supp-item" data-id="creatine">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">Creatine Monohydrate</div>
-                    <div class="supp-dose">5g</div>
-                </div>
-            </div>
-        </div>
+        <button class="btn-edit-list" onclick="openSuppModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Edit Supplement List
+        </button>
 
-        <div class="card">
-            <div class="card-header"><h2>Afternoon</h2></div>
-            <div class="supp-item" data-id="selenium">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">Selenium</div>
-                    <div class="supp-dose">200mcg (Selenomethionine)</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header"><h2>Evening (Stress & Sleep)</h2></div>
-            <div class="supp-item optional" data-id="zinc">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">Zinc Picolinate<span class="tag">Optional</span></div>
-                    <div class="supp-dose">15-25mg (if needed beyond hair treatment)</div>
-                </div>
-            </div>
-            <div class="supp-item" data-id="mag-glycinate">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">Magnesium Bisglycinate</div>
-                    <div class="supp-dose">150-200mg (Elemental)</div>
-                </div>
-            </div>
-            <div class="supp-item" data-id="ashwagandha">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">Ashwagandha<span class="badge on" id="ashwa-inline"><span class="badge-dot"></span>ON</span></div>
-                    <div class="supp-dose">300-600mg (KSM-66)</div>
-                </div>
-            </div>
-            <div class="supp-item" data-id="hair-pm">
-                <input type="checkbox" class="supp-check" onchange="updateSupplements()">
-                <div class="supp-info">
-                    <div class="supp-name">Hair Loss Treatment</div>
-                    <div class="supp-dose">1 Pill</div>
-                </div>
-            </div>
-        </div>
+        <div id="supp-list-morning"></div>
+        <div id="supp-list-afternoon"></div>
+        <div id="supp-list-evening"></div>
 
         <button class="btn-reset" onclick="resetSupplements()">Reset for Tomorrow</button>
     </div>
@@ -1597,10 +1728,20 @@
 <script>
 const STORAGE_KEY = 'healthTracker';
 
-const CYCLES = {
-    boron: { on: 14, off: 7, name: 'Boron' },
-    ashwa: { on: 30, off: 7, name: 'Ashwagandha' }
-};
+const DEFAULT_SUPPLEMENTS = [
+    { id: 'mag-taurate', name: 'Magnesium Taurate', dose: '125-150mg (Elemental)', timeSlot: 'morning', tags: [], optional: false, cycle: null, order: 0 },
+    { id: 'd3-k2', name: 'Vitamin D3 + K2', dose: '2000 IU / 50mcg', timeSlot: 'morning', tags: ['With Fat'], optional: false, cycle: null, order: 1 },
+    { id: 'omega3', name: 'Omega-3', dose: '1000-2000mg (High EPA)', timeSlot: 'morning', tags: ['With Fat'], optional: false, cycle: null, order: 2 },
+    { id: 'boron', name: 'Boron', dose: '3-6mg', timeSlot: 'morning', tags: [], optional: false, cycle: { key: 'boron', on: 14, off: 7 }, order: 3 },
+    { id: 'b-complex', name: 'B-Complex', dose: '1 Capsule (Methylated)', timeSlot: 'morning', tags: [], optional: false, cycle: null, order: 4 },
+    { id: 'hair-am', name: 'Hair Loss Treatment', dose: '1 Pill', timeSlot: 'morning', tags: [], optional: false, cycle: null, order: 5 },
+    { id: 'creatine', name: 'Creatine Monohydrate', dose: '5g', timeSlot: 'morning', tags: [], optional: false, cycle: null, order: 6 },
+    { id: 'selenium', name: 'Selenium', dose: '200mcg (Selenomethionine)', timeSlot: 'afternoon', tags: [], optional: false, cycle: null, order: 0 },
+    { id: 'zinc', name: 'Zinc Picolinate', dose: '15-25mg (if needed beyond hair treatment)', timeSlot: 'evening', tags: [], optional: true, cycle: null, order: 0 },
+    { id: 'mag-glycinate', name: 'Magnesium Bisglycinate', dose: '150-200mg (Elemental)', timeSlot: 'evening', tags: [], optional: false, cycle: null, order: 1 },
+    { id: 'ashwagandha', name: 'Ashwagandha', dose: '300-600mg (KSM-66)', timeSlot: 'evening', tags: [], optional: false, cycle: { key: 'ashwa', on: 30, off: 7 }, order: 2 },
+    { id: 'hair-pm', name: 'Hair Loss Treatment', dose: '1 Pill', timeSlot: 'evening', tags: [], optional: false, cycle: null, order: 3 }
+];
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -1611,30 +1752,54 @@ function getToday() {
 function getData() {
     const defaults = {
         supplements: { date: getToday(), checked: {}, streak: 0, lastCompleted: null },
-        cycles: {
-            boron: { startDate: getToday() },
-            ashwa: { startDate: getToday() }
-        },
+        cycles: {},
         weight: {},
         workouts: {},
         steps: {},
-        exercises: {}
+        exercises: {},
+        supplementDefs: []
     };
     try {
         const saved = localStorage.getItem(STORAGE_KEY);
-        if (!saved) return defaults;
+        if (!saved) {
+            defaults.supplementDefs = JSON.parse(JSON.stringify(DEFAULT_SUPPLEMENTS));
+            defaults.cycles = buildDefaultCycles(defaults.supplementDefs);
+            return defaults;
+        }
         const data = JSON.parse(saved);
-        return {
+        const result = {
             supplements: { ...defaults.supplements, ...data.supplements },
-            cycles: { ...defaults.cycles, ...data.cycles },
+            cycles: data.cycles || {},
             weight: data.weight || {},
             workouts: data.workouts || {},
             steps: data.steps || {},
-            exercises: data.exercises || {}
+            exercises: data.exercises || {},
+            supplementDefs: data.supplementDefs || []
         };
+        // Migration: populate supplementDefs if missing
+        if (!result.supplementDefs.length) {
+            result.supplementDefs = JSON.parse(JSON.stringify(DEFAULT_SUPPLEMENTS));
+        }
+        // Ensure cycles exist for all cycling supplements
+        result.supplementDefs.forEach(s => {
+            if (s.cycle && !result.cycles[s.cycle.key]) {
+                result.cycles[s.cycle.key] = { startDate: getToday() };
+            }
+        });
+        return result;
     } catch {
+        defaults.supplementDefs = JSON.parse(JSON.stringify(DEFAULT_SUPPLEMENTS));
+        defaults.cycles = buildDefaultCycles(defaults.supplementDefs);
         return defaults;
     }
+}
+
+function buildDefaultCycles(defs) {
+    const cycles = {};
+    defs.forEach(s => {
+        if (s.cycle) cycles[s.cycle.key] = { startDate: getToday() };
+    });
+    return cycles;
 }
 
 function saveData(data) {
@@ -1656,38 +1821,99 @@ document.querySelectorAll('.tab').forEach(tab => {
     });
 });
 
-// Cycles
-function getCycleStatus(key) {
+// Render supplements dynamically
+const SLOT_LABELS = { morning: 'Morning (Brain & Heart)', afternoon: 'Afternoon', evening: 'Evening (Stress & Sleep)' };
+
+function renderSupplements() {
     const data = getData();
-    const cycle = CYCLES[key];
+    const defs = data.supplementDefs;
+    const groups = { morning: [], afternoon: [], evening: [] };
+    defs.forEach(s => {
+        if (groups[s.timeSlot]) groups[s.timeSlot].push(s);
+    });
+    ['morning', 'afternoon', 'evening'].forEach(slot => {
+        groups[slot].sort((a, b) => a.order - b.order);
+        const container = document.getElementById('supp-list-' + slot);
+        if (!groups[slot].length) {
+            container.innerHTML = '';
+            return;
+        }
+        let html = `<div class="card"><div class="card-header"><h2>${SLOT_LABELS[slot]}</h2></div>`;
+        groups[slot].forEach(s => {
+            const optClass = s.optional ? ' optional' : '';
+            html += `<div class="supp-item${optClass}" data-id="${s.id}">`;
+            html += `<input type="checkbox" class="supp-check" onchange="updateSupplements()">`;
+            html += `<div class="supp-info"><div class="supp-name">${escHtml(s.name)}`;
+            if (s.tags) s.tags.forEach(t => { html += `<span class="tag">${escHtml(t)}</span>`; });
+            if (s.cycle) html += `<span class="badge on" id="${s.cycle.key}-inline"><span class="badge-dot"></span>ON</span>`;
+            if (s.optional) html += `<span class="tag">Optional</span>`;
+            html += `</div><div class="supp-dose">${escHtml(s.dose)}</div></div></div>`;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    });
+}
+
+function escHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+}
+
+function renderCycleStatus() {
+    const data = getData();
+    const cyclingSupps = data.supplementDefs.filter(s => s.cycle);
+    const container = document.getElementById('cycle-status-card');
+    if (!cyclingSupps.length) { container.innerHTML = ''; return; }
+    let html = '<div class="card"><div class="card-header"><h2>Cycle Status</h2></div><div class="card-body">';
+    cyclingSupps.forEach(s => {
+        const key = s.cycle.key;
+        html += `<div class="cycle-row"><span class="cycle-name">${escHtml(s.name)}</span>`;
+        html += `<div class="cycle-meta"><span class="cycle-days" id="${key}-days">Day 1 of ${s.cycle.on}</span>`;
+        html += `<span class="badge on" id="${key}-badge"><span class="badge-dot"></span>ON</span>`;
+        html += `<button class="btn-small" onclick="resetCycle('${key}')">Reset</button></div></div>`;
+    });
+    html += '</div></div>';
+    container.innerHTML = html;
+}
+
+// Cycles
+function getCycleStatus(key, cycleDef) {
+    const data = getData();
+    if (!data.cycles[key]) return { isOn: true, currentDay: 1, totalDays: cycleDef.on };
     const start = new Date(data.cycles[key].startDate);
     const today = new Date(getToday());
     const daysPassed = Math.floor((today - start) / 86400000);
-    const total = cycle.on + cycle.off;
+    const total = cycleDef.on + cycleDef.off;
     const dayInCycle = (daysPassed % total) + 1;
-    const isOn = dayInCycle <= cycle.on;
+    const isOn = dayInCycle <= cycleDef.on;
     return {
         isOn,
-        currentDay: isOn ? dayInCycle : dayInCycle - cycle.on,
-        totalDays: isOn ? cycle.on : cycle.off
+        currentDay: isOn ? dayInCycle : dayInCycle - cycleDef.on,
+        totalDays: isOn ? cycleDef.on : cycleDef.off
     };
 }
 
 function updateCycles() {
-    ['boron', 'ashwa'].forEach(key => {
-        const status = getCycleStatus(key);
+    const data = getData();
+    const cyclingSupps = data.supplementDefs.filter(s => s.cycle);
+    cyclingSupps.forEach(s => {
+        const key = s.cycle.key;
+        const status = getCycleStatus(key, s.cycle);
         const badgeClass = status.isOn ? 'on' : 'off';
         const badgeText = status.isOn ? 'ON' : 'OFF';
 
-        document.getElementById(key + '-days').textContent = `Day ${status.currentDay} of ${status.totalDays}`;
+        const daysEl = document.getElementById(key + '-days');
+        if (daysEl) daysEl.textContent = `Day ${status.currentDay} of ${status.totalDays}`;
 
         [key + '-badge', key + '-inline'].forEach(id => {
             const el = document.getElementById(id);
+            if (!el) return;
             el.className = `badge ${badgeClass}`;
             el.innerHTML = `<span class="badge-dot"></span>${badgeText}`;
         });
 
-        const item = document.querySelector(`[data-id="${key === 'ashwa' ? 'ashwagandha' : key}"]`);
+        const item = document.querySelector(`[data-id="${s.id}"]`);
         if (item) {
             item.classList.toggle('disabled', !status.isOn);
             const cb = item.querySelector('input');
@@ -1698,9 +1924,10 @@ function updateCycles() {
 }
 
 function resetCycle(key) {
-    if (!confirm(`Reset ${CYCLES[key].name} cycle?`)) return;
     const data = getData();
-    data.cycles[key].startDate = getToday();
+    const supp = data.supplementDefs.find(s => s.cycle && s.cycle.key === key);
+    if (!supp || !confirm(`Reset ${supp.name} cycle?`)) return;
+    data.cycles[key] = { startDate: getToday() };
     saveData(data);
     updateCycles();
     updateSupplements();
@@ -1712,7 +1939,7 @@ function updateSupplements() {
     const requiredItems = document.querySelectorAll('.supp-item:not(.disabled):not(.optional)');
     const checkboxes = Array.from(requiredItems).map(item => item.querySelector('.supp-check'));
     const checked = checkboxes.filter(c => c.checked).length;
-    const percent = checkboxes.length ? Math.round((checked / checkboxes.length) * 100) : 0;
+    const percent = checkboxes.length ? Math.round((checked / checkboxes.length) * 100) : 100;
 
     document.getElementById('progress-fill').style.width = percent + '%';
     document.getElementById('progress-percent').textContent = percent + '%';
@@ -1731,7 +1958,7 @@ function updateSupplements() {
         }
     });
 
-    if (percent === 100 && data.supplements.lastCompleted !== getToday()) {
+    if (percent === 100 && checkboxes.length > 0 && data.supplements.lastCompleted !== getToday()) {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         const yStr = yesterday.toISOString().split('T')[0];
@@ -1747,6 +1974,170 @@ function resetSupplements() {
     if (!confirm('Reset all supplements?')) return;
     document.querySelectorAll('.supp-check').forEach(cb => { if (!cb.disabled) cb.checked = false; });
     updateSupplements();
+}
+
+// Supplement Management Modal
+function generateSuppId(name) {
+    const base = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const data = getData();
+    const ids = data.supplementDefs.map(s => s.id);
+    if (!ids.includes(base)) return base;
+    let i = 2;
+    while (ids.includes(base + '-' + i)) i++;
+    return base + '-' + i;
+}
+
+function openSuppModal() {
+    renderSuppModalList();
+    document.getElementById('supp-modal').classList.add('visible');
+}
+
+function closeSuppModal() {
+    document.getElementById('supp-modal').classList.remove('visible');
+}
+
+function renderSuppModalList() {
+    const data = getData();
+    const defs = data.supplementDefs;
+    const groups = { morning: [], afternoon: [], evening: [] };
+    defs.forEach(s => { if (groups[s.timeSlot]) groups[s.timeSlot].push(s); });
+    let html = '';
+    ['morning', 'afternoon', 'evening'].forEach(slot => {
+        const items = groups[slot].sort((a, b) => a.order - b.order);
+        if (!items.length) return;
+        html += `<div class="supp-modal-group"><h3>${SLOT_LABELS[slot]}</h3>`;
+        items.forEach(s => {
+            html += `<div class="supp-modal-row" id="supp-row-${s.id}">`;
+            html += `<div class="supp-modal-row-info"><div class="supp-modal-row-name">${escHtml(s.name)}`;
+            if (s.optional) html += ' <span class="tag">Optional</span>';
+            if (s.cycle) html += ` <span class="tag">${s.cycle.on}on/${s.cycle.off}off</span>`;
+            html += `</div><div class="supp-modal-row-dose">${escHtml(s.dose)}</div></div>`;
+            html += `<div class="supp-modal-row-actions">`;
+            html += `<button class="btn-edit-supp" onclick="editSupplement('${s.id}')">Edit</button>`;
+            html += `<button class="btn-del-supp" onclick="deleteSupplement('${s.id}')">Delete</button>`;
+            html += `</div></div>`;
+        });
+        html += '</div>';
+    });
+    document.getElementById('supp-modal-list').innerHTML = html;
+}
+
+function editSupplement(id) {
+    const data = getData();
+    const s = data.supplementDefs.find(d => d.id === id);
+    if (!s) return;
+    const row = document.getElementById('supp-row-' + id);
+    if (!row) return;
+    row.outerHTML = `<div class="supp-modal-edit-row" id="supp-edit-${id}">
+        <input type="text" id="edit-name-${id}" value="${escAttr(s.name)}" placeholder="Name">
+        <input type="text" id="edit-dose-${id}" value="${escAttr(s.dose)}" placeholder="Dose">
+        <select id="edit-slot-${id}">
+            <option value="morning"${s.timeSlot==='morning'?' selected':''}>Morning</option>
+            <option value="afternoon"${s.timeSlot==='afternoon'?' selected':''}>Afternoon</option>
+            <option value="evening"${s.timeSlot==='evening'?' selected':''}>Evening</option>
+        </select>
+        <label><input type="checkbox" id="edit-opt-${id}"${s.optional?' checked':''}> Optional</label>
+        <div class="supp-modal-edit-actions">
+            <button class="btn-paste-cancel" onclick="renderSuppModalList()">Cancel</button>
+            <button class="btn-paste-load" onclick="saveSupplement('${id}')">Save</button>
+        </div>
+    </div>`;
+}
+
+function escAttr(str) {
+    return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function saveSupplement(id) {
+    const name = document.getElementById('edit-name-' + id).value.trim();
+    const dose = document.getElementById('edit-dose-' + id).value.trim();
+    const slot = document.getElementById('edit-slot-' + id).value;
+    const optional = document.getElementById('edit-opt-' + id).checked;
+    if (!name) { showToast('Name is required', true); return; }
+    const data = getData();
+    const s = data.supplementDefs.find(d => d.id === id);
+    if (!s) return;
+    s.name = name;
+    s.dose = dose;
+    s.timeSlot = slot;
+    s.optional = optional;
+    saveData(data);
+    renderSuppModalList();
+    renderSupplements();
+    renderCycleStatus();
+    restoreCheckboxState();
+    updateCycles();
+    updateSupplements();
+}
+
+function deleteSupplement(id) {
+    const data = getData();
+    const s = data.supplementDefs.find(d => d.id === id);
+    if (!s || !confirm(`Delete "${s.name}"?`)) return;
+    // Clean up cycle data
+    if (s.cycle && data.cycles[s.cycle.key]) {
+        delete data.cycles[s.cycle.key];
+    }
+    // Remove checked state
+    delete data.supplements.checked[id];
+    data.supplementDefs = data.supplementDefs.filter(d => d.id !== id);
+    saveData(data);
+    renderSuppModalList();
+    renderSupplements();
+    renderCycleStatus();
+    restoreCheckboxState();
+    updateCycles();
+    updateSupplements();
+}
+
+function addSupplement() {
+    const name = document.getElementById('add-supp-name').value.trim();
+    const dose = document.getElementById('add-supp-dose').value.trim();
+    const slot = document.getElementById('add-supp-slot').value;
+    const optional = document.getElementById('add-supp-optional').checked;
+    if (!name) { showToast('Name is required', true); return; }
+    const data = getData();
+    const sameSlot = data.supplementDefs.filter(s => s.timeSlot === slot);
+    const maxOrder = sameSlot.length ? Math.max(...sameSlot.map(s => s.order)) + 1 : 0;
+    data.supplementDefs.push({
+        id: generateSuppId(name),
+        name, dose, timeSlot: slot,
+        tags: [], optional, cycle: null,
+        order: maxOrder
+    });
+    saveData(data);
+    // Clear form
+    document.getElementById('add-supp-name').value = '';
+    document.getElementById('add-supp-dose').value = '';
+    document.getElementById('add-supp-optional').checked = false;
+    renderSuppModalList();
+    renderSupplements();
+    restoreCheckboxState();
+    updateCycles();
+    updateSupplements();
+    showToast(`Added "${name}"`);
+}
+
+function resetSupplementDefs() {
+    if (!confirm('Reset supplement list to defaults? This will remove any custom supplements.')) return;
+    const data = getData();
+    data.supplementDefs = JSON.parse(JSON.stringify(DEFAULT_SUPPLEMENTS));
+    data.cycles = buildDefaultCycles(data.supplementDefs);
+    saveData(data);
+    renderSuppModalList();
+    renderSupplements();
+    renderCycleStatus();
+    restoreCheckboxState();
+    updateCycles();
+    updateSupplements();
+    showToast('Reset to defaults');
+}
+
+function restoreCheckboxState() {
+    const data = getData();
+    document.querySelectorAll('.supp-item').forEach(item => {
+        item.querySelector('.supp-check').checked = data.supplements.checked[item.dataset.id] || false;
+    });
 }
 
 // Weight Validation
@@ -2518,26 +2909,94 @@ function saveExercises(dateStr, type, exercises) {
     saveData(data);
 }
 
+function lookupExerciseHistory(name, type, excludeDate) {
+    if (!name || !name.trim()) return [];
+    const data = getData();
+    const nameLower = name.trim().toLowerCase();
+    const results = [];
+    const dates = Object.keys(data.exercises || {}).sort().reverse();
+    for (const d of dates) {
+        if (d === excludeDate) continue;
+        const typeExercises = data.exercises[d][type];
+        if (!typeExercises) continue;
+        for (const ex of typeExercises) {
+            if (ex.name && ex.name.trim().toLowerCase() === nameLower && (ex.sets || ex.reps || ex.kg)) {
+                results.push({ date: d, sets: ex.sets, reps: ex.reps, kg: ex.kg });
+                break;
+            }
+        }
+        if (results.length >= 3) break;
+    }
+    return results;
+}
+
+function formatHistoryDate(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function renderExerciseHistory(context, type, index, name) {
+    const el = document.getElementById(`history-${context}-${type}-${index}`);
+    if (!el) return;
+    const excludeDate = context === 'edit' ? editingWorkoutDate : getToday();
+    const history = lookupExerciseHistory(name, type, excludeDate);
+    if (history.length === 0) {
+        el.classList.remove('visible');
+        el.innerHTML = '';
+        return;
+    }
+    const parts = history.map(h => {
+        const sets = h.sets || '?';
+        const reps = h.reps || '?';
+        const kg = h.kg ? ` @ ${h.kg}kg` : '';
+        return `<span class="hist-date">${formatHistoryDate(h.date)}</span>: ${sets}&times;${reps}${kg}`;
+    });
+    el.innerHTML = '<span class="hist-label">Previous:</span> ' + parts.join(' &middot; ');
+    el.classList.add('visible');
+}
+
+function renderAllExerciseHistories(context) {
+    const containerId = context === 'edit' ? 'exercise-panels-edit' : 'exercise-panels-today';
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.querySelectorAll('.exercise-entry').forEach(entry => {
+        const histEl = entry.querySelector('.exercise-history');
+        if (!histEl || !histEl.id) return;
+        const parts = histEl.id.replace('history-', '').split('-');
+        const ctx = parts[0];
+        const type = parts[1];
+        const idx = parseInt(parts[2], 10);
+        const nameInput = entry.querySelector('.exercise-entry-top input[type="text"]');
+        if (nameInput && nameInput.value.trim()) {
+            renderExerciseHistory(ctx, type, idx, nameInput.value);
+        }
+    });
+}
+
 function buildExercisePanelHTML(type, exercises, context) {
     let rowsHtml = '';
     exercises.forEach((ex, i) => {
-        rowsHtml += `<div class="exercise-row">
-            <input type="text" list="exercises-${type}" value="${escapeHtml(ex.name || '')}" placeholder="Exercise name"
-                onchange="updateExercise('${context}','${type}',${i},'name',this.value)"
-                oninput="updateExercise('${context}','${type}',${i},'name',this.value)">
-            <input type="number" value="${ex.sets || ''}" placeholder="0" min="0" max="99"
-                onchange="updateExercise('${context}','${type}',${i},'sets',this.value)">
-            <input type="number" value="${ex.reps || ''}" placeholder="0" min="0" max="999"
-                onchange="updateExercise('${context}','${type}',${i},'reps',this.value)">
-            <input type="number" value="${ex.kg || ''}" placeholder="0" min="0" max="999" step="0.5"
-                onchange="updateExercise('${context}','${type}',${i},'kg',this.value)">
-            <button class="exercise-remove" onclick="removeExercise('${context}','${type}',${i})">&times;</button>
+        rowsHtml += `<div class="exercise-entry">
+            <div class="exercise-entry-top">
+                <input type="text" list="exercises-${type}" value="${escapeHtml(ex.name || '')}" placeholder="Exercise name"
+                    onchange="updateExercise('${context}','${type}',${i},'name',this.value); renderExerciseHistory('${context}','${type}',${i},this.value)"
+                    oninput="updateExercise('${context}','${type}',${i},'name',this.value)">
+                <button class="exercise-remove" onclick="removeExercise('${context}','${type}',${i})">&times;</button>
+            </div>
+            <div class="exercise-history" id="history-${context}-${type}-${i}"></div>
+            <div class="exercise-entry-nums">
+                <input type="number" value="${ex.sets || ''}" placeholder="Sets" min="0" max="99"
+                    onchange="updateExercise('${context}','${type}',${i},'sets',this.value)">
+                <input type="number" value="${ex.reps || ''}" placeholder="Reps" min="0" max="999"
+                    onchange="updateExercise('${context}','${type}',${i},'reps',this.value)">
+                <input type="number" value="${ex.kg || ''}" placeholder="Kg" min="0" max="999" step="0.5"
+                    onchange="updateExercise('${context}','${type}',${i},'kg',this.value)">
+            </div>
         </div>`;
     });
 
     return `<div class="exercise-panel ${type}">
         <div class="exercise-panel-header">${STRENGTH_LABELS[type]} Exercises</div>
-        <div class="exercise-labels"><span>Exercise</span><span>Sets</span><span>Reps</span><span>Kg</span><span></span></div>
         ${rowsHtml}
         <button class="exercise-add-btn" onclick="addExercise('${context}','${type}')">+ Add Exercise</button>
     </div>`;
@@ -2564,6 +3023,7 @@ function renderExercisePanels() {
         html += buildExercisePanelHTML(type, exercises, 'today');
     });
     container.innerHTML = html;
+    renderAllExerciseHistories('today');
 }
 
 function renderEditExercisePanels() {
@@ -2583,6 +3043,7 @@ function renderEditExercisePanels() {
         html += buildExercisePanelHTML(type, exercises, 'edit');
     });
     container.innerHTML = html;
+    renderAllExerciseHistories('edit');
 }
 
 function getExerciseDate(context) {
@@ -2607,10 +3068,10 @@ function addExercise(context, type) {
     const container = document.getElementById(context === 'edit' ? 'exercise-panels-edit' : 'exercise-panels-today');
     const panels = container.querySelectorAll(`.exercise-panel.${type}`);
     if (panels.length > 0) {
-        const rows = panels[0].querySelectorAll('.exercise-row');
+        const rows = panels[0].querySelectorAll('.exercise-entry');
         if (rows.length > 0) {
             const lastRow = rows[rows.length - 1];
-            const nameInput = lastRow.querySelector('input[type="text"]');
+            const nameInput = lastRow.querySelector('.exercise-entry-top input[type="text"]');
             if (nameInput) nameInput.focus();
         }
     }
@@ -2747,10 +3208,11 @@ function init() {
     document.getElementById('current-date').textContent = formatDate(getToday());
     getDailyQuote();
 
+    renderSupplements();
+    renderCycleStatus();
+    restoreCheckboxState();
+
     const data = getData();
-    document.querySelectorAll('.supp-item').forEach(item => {
-        item.querySelector('.supp-check').checked = data.supplements.checked[item.dataset.id] || false;
-    });
     document.getElementById('stat-streak').textContent = data.supplements.streak || 0;
 
     updateCycles();
@@ -2813,6 +3275,7 @@ function importData(event) {
             if (imported.workouts) data.workouts = imported.workouts;
             if (imported.steps) data.steps = imported.steps;
             if (imported.exercises) data.exercises = imported.exercises;
+            if (imported.supplementDefs) data.supplementDefs = imported.supplementDefs;
 
             saveData(data);
 
@@ -2933,6 +3396,7 @@ function loadPastedData() {
         if (imported.workouts) data.workouts = imported.workouts;
         if (imported.steps) data.steps = imported.steps;
         if (imported.exercises) data.exercises = imported.exercises;
+        if (imported.supplementDefs) data.supplementDefs = imported.supplementDefs;
         saveData(data);
         closePasteModal();
         init();
