@@ -36,7 +36,7 @@ All state is stored in `localStorage` under the key `healthTracker`. The `getDat
 ### Three Modules
 
 1. **Supplements** — 13+ items across Morning/Afternoon/Evening time slots. Tracks daily completion streak. Manages on/off cycling for Boron (14 on / 7 off) and Ashwagandha (30 on / 7 off).
-2. **Weight** — Logs weight (kg) and body fat (%). Custom Canvas-based line charts with 7D/14D/30D range selector. Validation: weight 20–300 kg, body fat 1–60%.
+2. **Weight** — Logs weight (kg) and body fat (%). Custom Canvas-based line charts with 7D/14D/30D/60D/90D range selector. Validation: weight 20–300 kg, body fat 1–60%. Charts have interactive tooltips — hovering/tapping a data point shows a tooltip with the date and value, and highlights the point with a glow ring effect (`weightChartPoints`/`bfChartPoints` arrays, `drawHighlight()`, `initChartTooltips()`).
 3. **Workouts** — Push/Pull/Legs strength tracking with per-exercise logging (name, sets, reps, kg) and datalist autocomplete. Cardio (Zone 2, HIIT), daily steps. Rest mode is exclusive (clears other selections). Exercises are stored parallel to workouts — toggling off a type does not delete its exercises. Exercise entries use a card-based UI with color-coded left borders per type and inline progressive overload history showing the last 3 sessions (`lookupExerciseHistory()`, `renderExerciseHistory()`).
 
 ### Clipboard Sync
